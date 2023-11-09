@@ -168,10 +168,19 @@ class MemberPressAPI_Endpoints:
         return f"{cls.MEMBERPRESS_API_BASE}me/"
 
     # -------------------------------------------------------------------------
+    # curl "https://set-me-please.com/wp-json/mp/v1/members/123456" -H "MEMBERPRESS-API-KEY: set-me-please", or
     # curl "https://set-me-please.com/wp-json/mp/v1/members?search=mcdaniel" -H "MEMBERPRESS-API-KEY: set-me-please"
     # -------------------------------------------------------------------------
-    def MEMBERPRESS_API_MEMBER_PATH(username):
-        return MemberPressAPI_Endpoints.MEMBERPRESS_API_BASE + "members?search=" + username
+    def MEMBERPRESS_API_MEMBER_PATH(user_id=None, username=None):
+        # if both values are provided, user_id is preferred over username
+        suffix = None
+        if user_id:
+            suffix = f"members/{user_id}" 
+        elif username:
+            suffix = f"members?search={username}"
+        if not suffix:
+            raise ValueError("A filter criterion is required.")
+        return MemberPressAPI_Endpoints.MEMBERPRESS_API_BASE + suffix
 
 
 COMPLETE_MEMBER_DICT = [
