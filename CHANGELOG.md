@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## Version 1.0.4 (2023-11-09)
+
+- Add support for retrieving a Member by user_id
+
 ## Version 1.0.3 (2023-03-29)
 
 - fix caching to include query parameters in cache key
