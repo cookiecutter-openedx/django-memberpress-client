@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 tests."""
 # python stuff
 import logging
 import os
@@ -6,14 +8,13 @@ from time import sleep
 import unittest
 import json
 from datetime import datetime
-from requests import request
 
 # our testing code starts here
 # -----------------------------------------------------------------------------
 from memberpress_client.member import Member  # noqa: E402
-from memberpress_client.transaction import Transaction  # noqa: E402
-from memberpress_client.subscription import Subscription  # noqa: E402
-from memberpress_client.membership import Membership  # noqa: E402
+from memberpress_client.transaction import Transaction  # noqa: E402,F401
+from memberpress_client.subscription import Subscription  # noqa: E402,F401
+from memberpress_client.membership import Membership  # noqa: E402,F401
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 def load_test_member(test_file):
+    """Load test data from a file."""
     with io.open(os.path.join(HERE, "data", "api", test_file), "rt", encoding="utf8") as f:
         return f.read()
 
@@ -36,11 +38,12 @@ invalid_member_no_trx = json.loads(load_test_member("invalid-member-no-trx.json"
 
 
 class TestMember(unittest.TestCase):
+    """Test Member class."""
+
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName)
 
     def test_online_1(self):
-
         member = Member(username="jon")
 
         if not member.ready:

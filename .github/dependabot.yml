@@ -3,18 +3,33 @@
 
 version: 2
 updates:
-  # Update GitHub actions in workflows
   - package-ecosystem: "github-actions"
     directory: "/"
-    # Check for updates to GitHub Actions every weekday
     schedule:
       interval: "daily"
-
-  # Enable version updates for Python/Pip - Production
+    assignees:
+      - "lpm0073"
+    reviewers:
+      - "lpm0073"
   - package-ecosystem: "pip"
-    # Look for a `requirements.txt` in the `root` directory
-    # also 'setup.cfg', 'runtime.txt' and 'requirements/*.txt'
-    directory: "/"
-    # Check for updates to GitHub Actions every weekday
+    directory: "/requirements/"
     schedule:
       interval: "daily"
+    labels:
+      - "dependencies"
+      - "python"
+    assignees:
+      - "lpm0073"
+    reviewers:
+      - "lpm0073"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
+      - "javascript"
+    assignees:
+      - "lpm0073"
+    reviewers:
+      - "lpm0073"

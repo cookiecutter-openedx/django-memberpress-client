@@ -1,4 +1,5 @@
 .venv
+venv
 .env
 django_cache
 __pycache__

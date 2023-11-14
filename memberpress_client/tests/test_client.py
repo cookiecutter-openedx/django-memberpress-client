@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 tests."""
 from unittest import TestCase
 from unittest.mock import patch
 
 from django.core.cache import cache
 
 from memberpress_client.client import MemberpressAPIClient
+
 
 class MockResponse:
     def __init__(self, json_data, status_code):
@@ -12,13 +15,12 @@ class MockResponse:
 
     def json(self):
         return self.json_data
-    
+
     def raise_for_status(self):
         pass
 
 
 class TestClient(TestCase):
-
     def setUp(self):
         cache.clear()
 
@@ -50,4 +52,3 @@ class TestClient(TestCase):
         # call again with same params but caching disabled should make a request
         client.get("test", params={"param_1": "value_1", "param_2": "value_3"}, enable_caching=False)
         assert mock_get.call_count == 5
-        

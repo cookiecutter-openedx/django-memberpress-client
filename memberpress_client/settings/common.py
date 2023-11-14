@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-Common Pluggable Django App settings
+Common Pluggable Django App settings.
 
 Handling of environment variables, see: https://django-environ.readthedocs.io/en/latest/
 to convert .env to yml see: https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
@@ -37,10 +38,7 @@ environ.Env.read_env(os.path.join(REPO_ROOT, ".env"))
 
 
 def plugin_settings(settings):
-    """
-    Injects local settings into django settings
-    """
-
+    """Injects local settings into django settings."""
     settings.MEMBERPRESS_API_KEY = env("MEMBERPRESS_API_KEY")
     settings.MEMBERPRESS_API_BASE_URL = env("MEMBERPRESS_API_BASE_URL")
     settings.MEMBERPRESS_API_KEY_NAME = env("MEMBERPRESS_API_KEY_NAME")  # noqa: F841

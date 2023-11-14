@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
 """
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
-
 Local dev settings.
+
 In order to mock up a realistic Django local dev environment i created a blank
 project using:
     cookiecutter https://github.com/mabdullahadeel/cookiecutter-django-mysql
@@ -22,7 +21,7 @@ env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     ENV_PATH = os.path.join(APPS_DIR, "settings", ".envs", ".local", ".django")
-    print("Loading environment variables from {ENV_PATH}".format(ENV_PATH=ENV_PATH))
+    print("Loading environment variables from {ENV_PATH}".format(ENV_PATH=ENV_PATH))  # noqa
     env.read_env(ENV_PATH)
 
 # your local dev & test settings go here

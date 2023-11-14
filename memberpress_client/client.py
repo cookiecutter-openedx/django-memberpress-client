@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Lawrence McDaniel - https://lawrencemcdaniel.com
 Oct-2022
@@ -25,8 +26,10 @@ from memberpress_client.decorators import request_manager
 # disable the following warnings:
 # -------------------------------
 # /usr/local/lib/python3.9/site-packages/urllib3/connectionpool.py:1043:
-# InsecureRequestWarning: Unverified HTTPS request is being made to host 'staging.global-communications-academy.com'.
-# Adding certificate verification is strongly advised. See: https://urllib3.readtheocs.io/en/1.26.x/advanced-usage.html#ssl-warnings
+# InsecureRequestWarning: Unverified HTTPS request is being made to host
+#       'staging.global-communications-academy.com'.
+# Adding certificate verification is strongly advised.
+# See: https://urllib3.readtheocs.io/en/1.26.x/advanced-usage.html#ssl-warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 logger = logging.getLogger(__name__)
@@ -73,7 +76,7 @@ class MemberpressAPIClient(Memberpress):
         url = self.get_url(path)
         response = None
         if enable_caching:
-            cache_key_params = json.dumps(params, sort_keys=True, separators=(',', ':'))
+            cache_key_params = json.dumps(params, sort_keys=True, separators=(",", ":"))
             cache_key = f"MemberpressAPIClient.get:{url}:{cache_key_params}"
             response = cache.get(cache_key)
 
@@ -96,7 +99,7 @@ class MemberpressAPIClient(Memberpress):
             if type(response) not in [dict, list]:
                 try:
                     response = response.json()
-                except Exception:
+                except Exception:  # noqa
                     response = json.dumps(response)
 
             # caching results iff response is a valid json object.
@@ -106,7 +109,7 @@ class MemberpressAPIClient(Memberpress):
         return response
 
     def is_valid_dict(self, response, qc_keys) -> bool:
-        if not type(response) == dict:
+        if not type(response) is dict:
             logger.warning(
                 "is_valid_dict() was expecting a dict but received an object of type: {type}".format(
                     type=type(response)

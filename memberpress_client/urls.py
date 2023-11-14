@@ -1,9 +1,5 @@
-"""
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
-
-memberpress REST API Client plugin for Django - url scaffolding
-"""
+# -*- coding: utf-8 -*-
+"""memberpress REST API Client plugin for Django - url scaffolding."""
 from django.conf import settings
 from django.urls import include, path
 

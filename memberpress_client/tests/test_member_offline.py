@@ -1,24 +1,26 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # python stuff
 import os
 import io
 import unittest
 import json
 from datetime import datetime
-from requests import request
 
 
 # our testing code starts here
 # -----------------------------------------------------------------------------
 from memberpress_client.member import Member  # noqa: E402
-from memberpress_client.transaction import Transaction  # noqa: E402
-from memberpress_client.subscription import Subscription  # noqa: E402
-from memberpress_client.membership import Membership  # noqa: E402
+from memberpress_client.transaction import Transaction  # noqa: E402,F401
+from memberpress_client.subscription import Subscription  # noqa: E402,F401
+from memberpress_client.membership import Membership  # noqa: E402,F401
 
 # setup test data
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 def load_test_member(test_file):
+    """Load test data from a file."""
     with io.open(os.path.join(HERE, "data", "api", test_file), "rt", encoding="utf8") as f:
         return f.read()
 
@@ -37,11 +39,9 @@ class TestMember(unittest.TestCase):
         super().__init__(methodName)
 
     def test_none_member_1(self):
-
         member = Member(request=None, response=None)  # noqa: F841
 
     def test_none_member_2(self):
-
         member = Member(request=None, response=None)
         # class properties
         self.assertEqual(member.request, None)
@@ -79,7 +79,6 @@ class TestMember(unittest.TestCase):
         self.assertEqual(member.is_trial_subscription, False)
 
     def test_offline_1(self):
-
         member = Member(request=None, response=valid_member_response)
         registered_at = datetime.strptime("2022-10-07 22:21:58", "%Y-%m-%d %H:%M:%S")
 
@@ -122,13 +121,11 @@ class TestMember(unittest.TestCase):
         self.assertEqual(member.is_trial_subscription, False)
 
     def test_offline_2(self):
-
         member = Member(request=None, response=invalid_member_missing_subscriptions)
         self.assertEqual(member.is_active_subscription, False)
         self.assertEqual(member.is_trial_subscription, False)
 
     def test_offline_3(self):
-
         member = Member(request=None, response=invalid_member_no_trx)
 
         self.assertEqual(member.is_complete_dict, False)
@@ -137,7 +134,6 @@ class TestMember(unittest.TestCase):
         self.assertEqual(member.is_trial_subscription, False)
 
     def test_offline_4_first_transaction(self):
-
         member = Member(request=None, response=valid_member_response)
         trx = member.first_transaction
 
@@ -173,7 +169,6 @@ class TestMember(unittest.TestCase):
         self.assertEqual(trx.parent_transaction_id, 0)
 
     def test_offline_5_recent_subscription(self):
-
         scr = Subscription(subscription=valid_member_response["recent_subscriptions"][0])
         self.assertEqual(scr.coupon, 0)
         self.assertEqual(scr.membership, 2420)
@@ -211,7 +206,6 @@ class TestMember(unittest.TestCase):
         self.assertEqual(scr.response, None)
 
     def test_offline_6_membership(self):
-
         mbr = Membership(membership=valid_member_response["active_memberships"][0])
         self.assertEqual(mbr.id, 2420)
         self.assertEqual(mbr.title, "Student")

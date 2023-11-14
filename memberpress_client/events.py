@@ -1,13 +1,11 @@
+# -*- coding: utf-8 -*-
 """
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
-
-memberpress REST API Client plugin for Django - events classes. A collection of
+Memberpress REST API Client plugin for Django - events classes. A collection of
 strongly-typed, higher-order classes, all descended from MemberpressEvent, that
 consist of varying combinations of Member, Membership, Transaction,
 and Subscription objects.
 
-This is part of the webhooks implmentation. memberpress webhooks
+This is part of the webhooks implementation. memberpress webhooks
 post events to the "/mp/events" URL endpoint. the body of the request object
 from memberpress contains a dict who's structure should match one of the
 four dozen child classes of MemberpressEvent found in this module.
@@ -50,9 +48,7 @@ MemberpressEventChild = TypeVar("MemberpressEventChild", bound="MemberpressEvent
 
 
 class MemberpressEvent(Generic[MemberpressEventChild], Memberpress):
-    """
-    Event base class
-    """
+    """Event base class."""
 
     _event = None  # a string. example: "after-cc-expires-reminder"
     _event_type = None  # a string. example: "subscription"
@@ -153,7 +149,7 @@ class MemberpressEvent(Generic[MemberpressEventChild], Memberpress):
             self._event = value
             return
 
-        if type(value) == str:
+        if type(value) is str:
             if value in MemberpressEvents.all():
                 self._event = value
             else:
@@ -171,7 +167,7 @@ class MemberpressEvent(Generic[MemberpressEventChild], Memberpress):
             self._event_type = value
             return
 
-        if type(value) == str:
+        if type(value) is str:
             if value in MemberpressEventTypes.all():
                 self._event_type = value
             else:
@@ -1036,9 +1032,13 @@ MEMBERPRESS_EVENT_CLASSES = {
 
 
 def get_event(data: dict) -> MemberpressEventChild:
-    """
-    introspect a data dict received by a memberpress webhook event, determine the event type
-    and return an instance of the corresponding class.
+    """Return a MemberpressEventChild object based on the data provided.
+
+    Args:
+        data (dict): A dictionary containing the data for the event.
+
+    Returns:
+        MemberpressEventChild: An instance of a MemberpressEventChild subclass.
     """
     event = data.get("event", None) or MemberpressEvents.UNIDENTIFIED_EVENT
     cls = MEMBERPRESS_EVENT_CLASSES[event]

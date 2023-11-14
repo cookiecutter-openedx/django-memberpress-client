@@ -1,8 +1,7 @@
+# -*- coding: utf-8 -*-
 """
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
+Memberpress REST API Client plugin for Django - decorators.
 
-memberpress REST API Client plugin for Django - decorators.
 request_manager() - common logging and error handling for all REST api verbs
 app_logger() - better logging for lms.log and cms.log
 """
@@ -49,7 +48,9 @@ def request_manager(method):
                 else ""
             )
             raise Exception(
-                "memberpress_client.decorators.request_manager(){operation} an unhandled exception '{error_message}', was returned by {method}(): {verb} {url}, headers={headers}, body={body}".format(
+                "memberpress_client.decorators.request_manager(){operation} an "
+                "unhandled exception '{error_message}', was returned by {method}():"
+                " {verb} {url}, headers={headers}, body={body}".format(
                     operation=operation,
                     method=method.__name__,
                     verb=e.response.request.method,
@@ -65,14 +66,14 @@ def request_manager(method):
 
 def app_logger(func):
     """
-    Decorate a function to add an entry to the app log with the function name,
-    its positional arguments, and keyword pairs presented as a formatted dict.
+    Log the name of the module, class, and function being called,
+    along with the positional and keyword arguments passed to the function.
 
-    sample output:
-        2022-10-07 19:45:26,869 INFO app_logger: registration.views.EmailVerificationView().get() ["<WSGIRequest: GET '/verify-email/MjY1/bcxw75-69581da3ea4f0cefad2f0f2205354117/'>"] keyword args: {
-            "uid": "MjY1",
-            "token": "*** -- REDACTED -- ***"
-        }
+    Args:
+        func: The function to be decorated.
+
+    Returns:
+        The decorated function.
     """
 
     @functools.wraps(func)
@@ -88,7 +89,7 @@ def app_logger(func):
             name_of_module = cls.__module__
             # slice off the 'self' positional argument
             logged_args = args[1:]
-        except Exception:
+        except Exception:  # noqa
             # We weren't called by a class method. Fall back to initializing variables for
             # a standard module function.
             name_of_class = ""

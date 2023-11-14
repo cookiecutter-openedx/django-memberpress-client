@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 import logging
 
 from rest_framework.views import APIView
@@ -6,7 +8,6 @@ from django.http import HttpResponse
 from memberpress_client.decorators import app_logger
 from memberpress_client.events import get_event
 from memberpress_client.models import MemberpressEventLog
-from memberpress_client.utils import get_user
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ class EventView(APIView):
         event = get_event(data=data)
         try:
             username = event.username or request.user.username
-        except Exception:
+        except Exception:  # noqa # noqa
             username = "missing"
 
         MemberpressEventLog(

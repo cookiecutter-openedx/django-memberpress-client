@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # python stuff
 import os
 import io
 import unittest
 import json
-from datetime import datetime
-from requests import request
 
 
 # our testing code starts here
@@ -16,6 +16,7 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 
 
 def load_test_member(test_file):
+    """Load test data from a file."""
     with io.open(os.path.join(HERE, "data", "api", test_file), "rt", encoding="utf8") as f:
         return f.read()
 
@@ -30,7 +31,6 @@ class TestMember(unittest.TestCase):
         super().__init__(methodName)
 
     def test_offline_1(self):
-
         member = Member(request=None, response=valid_member_nosubscription)
         # registered_at = datetime.strptime("2022-10-07 22:21:58", "%Y-%m-%d %H:%M:%S")
 

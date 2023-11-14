@@ -1,10 +1,6 @@
-"""
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
+# -*- coding: utf-8 -*-
+"""Memberpress REST API Client plugin for Django - Models."""
 
-memberpress REST API Client plugin for Django - Models.
-"""
-from email.policy import default
 from django.utils.translation import ugettext as _
 from django.db import models
 from model_utils.models import TimeStampedModel
@@ -16,9 +12,22 @@ from memberpress_client.constants import MEMBERPRESS_EVENTS, MEMBERPRESS_EVENT_T
 
 
 class MemberpressEventLog(TimeStampedModel):
-    """ """
+    """
+    Model to store logs of events received from MemberPress webhooks.
+
+    Attributes:
+        sender (str): The site referrer. Example: https://wordpress-site.com/mb/webhooks/
+        username (str): The username provided by MemberPress.
+        event (str): The MemberPress event. Examples: recurring-transaction-completed
+        event_type (str): The type of MemberPress event: transaction, subscription, member, membership.
+        is_valid (bool): True if the JSON received was validated by memberpress_client. False otherwise.
+        is_processed (bool): True if this event has been analyzed and acted upon.
+        json (dict): A JSON dict sent by the webhook event in the request body.
+    """
 
     class Meta:
+        """Meta definition for MemberpressEventLog."""
+
         verbose_name_plural = "memberpress event log"
 
     sender = models.URLField(
@@ -64,4 +73,5 @@ class MemberpressEventLog(TimeStampedModel):
     )
 
     def __str__(self):
+        """Return a string representation of this object."""
         return str(self.created) + "-" + self.event

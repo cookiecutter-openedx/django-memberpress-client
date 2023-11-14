@@ -1,9 +1,5 @@
-"""
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
-
-memberpress REST API Client plugin for Django - Member class
-"""
+# -*- coding: utf-8 -*-
+"""Memberpress REST API Client plugin for Django - Member class."""
 
 # Python stuff
 import logging
@@ -26,9 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class Member(MemberpressAPIClient):
-    """
-    memberpress REST API client
-    """
+    """Memberpress REST API client."""
 
     _request = None
     _username = None
@@ -41,10 +35,12 @@ class Member(MemberpressAPIClient):
 
     def __init__(self, username=None, user=None, request=None, response=None, user_id=None) -> None:
         """
+        Initialize the Memberpress REST API client.
+
         username <str>: a Wordpress username
         user <obj>: a Django user object
         request <requests> a Django requests.request object
-        response <json> the json reponse from memberpress REST API
+        response <json> the json response from memberpress REST API
         user_id <int>: a Wordpress user ID
         """
         super().__init__()
@@ -56,24 +52,24 @@ class Member(MemberpressAPIClient):
         if response:
             try:
                 self._username = response["username"]
-            except Exception:
+            except Exception:  # noqa
                 pass
 
-        # 4rd priority username
+        # 4th priority username
         if request:
             try:
                 self._username = request.user.username
-            except Exception:
+            except Exception:  # noqa
                 pass
 
-        # 3nd priority username
+        # 3rd priority username
         if user:
             try:
                 self._username = user.username
-            except Exception:
+            except Exception:  # noqa
                 pass
 
-        # 2st priority username
+        # 2nd priority username
         if username:
             self._username = username
 
@@ -114,7 +110,7 @@ class Member(MemberpressAPIClient):
             logger.error("member property is not set for username {username}".format(username=self.username))
             self._is_valid = False
 
-        if type(self.member) != dict:
+        if type(self.member) is not dict:
             logger.error(
                 "was expecting member object of type dict but received an object of type {t}".format(
                     t=type(self.member)
@@ -144,7 +140,7 @@ class Member(MemberpressAPIClient):
 
     @request.setter
     def request(self, value):
-        if type(value) == requests.request or value is None:
+        if type(value) is requests.request or value is None:
             self.init()
             self._request = value
             self.validate()
@@ -154,7 +150,7 @@ class Member(MemberpressAPIClient):
     @property
     def member(self) -> dict:
         """
-        implements a single-shot attempt at retreiving a member dict from the rest api.
+        Implements a single-shot attempt at retrieving a member dict from the rest api.
         if all works as hoped then then set the property to the rest api dict result.
 
         Any errors or validation failures will result in self.member returning
@@ -169,16 +165,16 @@ class Member(MemberpressAPIClient):
             path = MemberPressAPI_Endpoints.MEMBERPRESS_API_MEMBER_PATH(user_id=self._user_id, username=self._username)
             retval = self.get(path=path, operation=MemberPressAPI_Operations.GET_MEMBER)
 
-            if type(retval) == list and len(retval) == 1:
+            if type(retval) is list and len(retval) == 1:
                 retval = retval[0]
 
-            if type(retval) == list and len(retval) > 1:
+            if type(retval) is list and len(retval) > 1:
                 for d in retval:
                     if d.get("username") == self.username:
                         retval = d
                         break
 
-            if type(retval) != dict:
+            if type(retval) is not dict:
                 logger.warning("member() was expecting a return type of dict but received {t}.".format(t=type(retval)))
                 retval = None
 
@@ -232,7 +228,7 @@ class Member(MemberpressAPIClient):
     @property
     def active_txn_count(self) -> int:
         """
-        the number of historical financial transactions (ie Stripe, PayPal, etc.)
+        The number of historical financial transactions (ie Stripe, PayPal, etc.)
         that exist for this member.
         """
         return self.str2int(self.member.get("active_txn_count"))
@@ -240,24 +236,19 @@ class Member(MemberpressAPIClient):
     @property
     def expired_txn_count(self) -> int:
         """
-        the number of historical financial transactions (ie Stripe, PayPal, etc.)
+        The number of historical financial transactions (ie Stripe, PayPal, etc.)
         that exist for this member with an expiration date in the past.
         """
         return self.str2int(self.member.get("expired_txn_count"))
 
     @property
     def trial_txn_count(self) -> int:
-        """
-        the number of free trials that exist for this member.
-        """
+        """The number of free trials that exist for this member."""
         return self.str2int(self.member.get("trial_txn_count"))
 
     @property
     def login_count(self) -> int:
-        """
-        the number of times that this member has logged in to the
-        Wordpress site hosting the memberpress REST API plugin.
-        """
+        """Counts the login instances of a member on the Wordpress site with the memberpress REST API plugin."""
         return self.str2int(self.member.get("login_count"))
 
     @property
@@ -290,8 +281,9 @@ class Member(MemberpressAPIClient):
     @property
     def is_complete_dict(self) -> bool:
         """
-        validate that response is a json dict containing at least
-        the keys in qc_keys. These are the dict keys returned by the
+        Validate that response is a json dict containing at least the keys in qc_keys.
+
+        These are the dict keys returned by the
         MemberPress REST api "/me" endpoint for a subscribed user.
         """
         qc_keys = COMPLETE_MEMBER_DICT
@@ -300,8 +292,9 @@ class Member(MemberpressAPIClient):
     @property
     def is_minimum_member_dict(self) -> bool:
         """
-        validate that response is a json dict containing at least
-        the minimum required keys in qc_keys. These are the dict keys
+        Validate that response is a json dict containing at least the minimum required keys in qc_keys.
+
+        These are the dict keys
         containing information about the identity of the member and
         the status of the member's subscription.
         """

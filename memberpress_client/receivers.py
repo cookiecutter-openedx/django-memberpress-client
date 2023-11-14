@@ -1,9 +1,5 @@
-"""
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
-
-Listen for signals published by edxapp.
-"""
+# -*- coding: utf-8 -*-
+"""Listen for signals published by edxapp."""
 
 # Python
 import logging
@@ -32,9 +28,7 @@ log = logging.getLogger(__name__)
 
 @receiver(COURSE_GRADE_NOW_PASSED, dispatch_uid="stepwisemath_passing_learner")
 def listen_for_passing_grade(sender, user, course_id, **kwargs):  # pylint: disable=unused-argument
-    """
-    Listen for a signal indicating that the user has passed a course run.
-    """
+    """Listen for a signal indicating that the user has passed a course run."""
     log.info(
         "Enrolled student {username} has achieved a passing grade in the course {course_id} [{kwargs}]".format(
             username=user.username, course_id=course_id, kwargs=kwargs

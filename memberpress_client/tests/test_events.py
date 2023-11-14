@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # python stuff
 from asyncio.log import logger
 import os
@@ -19,6 +21,7 @@ EXT = (".json",)
 
 
 def load_json(test_file):
+    """Load test data from a file."""
     if test_file == "unidentified-event":
         return
 

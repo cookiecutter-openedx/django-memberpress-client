@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # Python stuff
-import json
 import logging
 from datetime import datetime
 
@@ -14,7 +15,7 @@ class Membership(MemberpressAPIClient):
     def __init__(self, membership=None) -> None:
         super().__init__()
         self.init()
-        if type(membership) == dict:
+        if type(membership) is dict:
             self.json = membership
         else:
             logger.warning("received an invalid membership object: {o}".format(o=membership))
@@ -25,8 +26,9 @@ class Membership(MemberpressAPIClient):
     @property
     def is_complete_dict(self) -> bool:
         """
-        validate that response is a json dict containing at least
-        the keys in qc_keys. These are the dict keys returned by the
+        Validate that response is a json dict containing at least the keys in qc_keys.
+
+        These are the dict keys returned by the
         MemberPress REST api "/me" endpoint for a subscribed user.
         """
         qc_keys = COMPLETE_MEMBERSHIP_DICT
@@ -36,7 +38,7 @@ class Membership(MemberpressAPIClient):
     def id(self) -> int:
         try:
             return int(self.json["id"])
-        except Exception:
+        except Exception:  # noqa
             return None
 
     @property

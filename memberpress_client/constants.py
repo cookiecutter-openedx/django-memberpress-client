@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Lawrence McDaniel - https://lawrencemcdaniel.com
 Oct-2022
@@ -18,9 +19,7 @@ class MemberpressTransactionTypes:
 class TypeBase:
     @classmethod
     def all(self):
-        """
-        generate a list of all class variable values
-        """
+        """Generate a list of all class variable values."""
         return [
             getattr(self, value)
             for value in [attr for attr in dir(self) if not callable(getattr(self, attr)) and not attr.startswith("__")]
@@ -175,7 +174,7 @@ class MemberPressAPI_Endpoints:
         # if both values are provided, user_id is preferred over username
         suffix = None
         if user_id:
-            suffix = f"members/{user_id}" 
+            suffix = f"members/{user_id}"
         elif username:
             suffix = f"members?search={username}"
         if not suffix:

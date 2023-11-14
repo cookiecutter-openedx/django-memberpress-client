@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # Python stuff
-import json
 import logging
 from datetime import datetime
 
@@ -14,7 +15,7 @@ class Transaction(MemberpressAPIClient):
     def __init__(self, transaction=None) -> None:
         super().__init__()
         self.init()
-        if type(transaction) == dict:
+        if type(transaction) is dict:
             self.json = transaction
         else:
             logger.warning("received an invalid transaction object: {o}".format(o=transaction))
@@ -25,9 +26,9 @@ class Transaction(MemberpressAPIClient):
     @property
     def is_complete_dict(self) -> bool:
         """
-        validate that response is a json dict containing at least
-        the keys in qc_keys. These are the dict keys returned by the
-        MemberPress REST api "/me" endpoint for a subscribed user.
+        Validate that response is a json dict containing at least the keys in qc_keys.
+
+        These are the dict keys returned by the MemberPress REST api "/me" endpoint for a subscribed user.
         """
         qc_keys = COMPLETE_TRANSACTION_DICT
         return self.is_valid_dict(self.json, qc_keys)

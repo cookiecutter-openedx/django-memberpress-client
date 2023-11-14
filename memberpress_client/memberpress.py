@@ -1,6 +1,5 @@
-"""
-base class
-"""
+# -*- coding: utf-8 -*-
+"""Base class."""
 from datetime import datetime
 import logging
 import validators
@@ -39,20 +38,20 @@ class Memberpress:
         self._is_valid = True
 
     def str2bool(self, value):
-        if type(value) == bool:
+        if type(value) is bool:
             return value
 
         if type(value) in [int, float]:
             value = int(value)
             return True if value == 1 else False
 
-        if type(value) == str:
+        if type(value) is str:
             return True if str(value).lower() == "true" else False
 
         return False
 
     def str2datetime(self, value):
-        if type(value) != str:
+        if type(value) is not str:
             return None
 
         date_str = value[0:19]
@@ -69,7 +68,7 @@ class Memberpress:
         logger.warning("Cannot convert datetime string {value}".format(value=value))
 
     def str2int(self, value):
-        if type(value) == str and value == "":
+        if type(value) is str and value == "":
             return None
 
         if type(value) in (str, int, float):
@@ -91,11 +90,11 @@ class Memberpress:
     def str2url(self, value):
         try:
             return value if validators.url(value) else None
-        except Exception:
+        except Exception:  # noqa
             return None
 
     def is_valid_dict(self, response, qc_keys) -> bool:
-        if not type(response) == dict:
+        if not type(response) is dict:
             logger.warning(
                 "is_valid_dict() was expecting a dict but received an object of type: {type}".format(
                     type=type(response)
@@ -124,7 +123,7 @@ class Memberpress:
 
     @qc_keys.setter
     def qc_keys(self, value):
-        if type(value) == list:
+        if type(value) is list:
             self._qc_keys = list(set(value))
         else:
             logger.warning("qc_keys.setter received an invalid value: {v}".format(v=value))
@@ -135,7 +134,7 @@ class Memberpress:
 
     @json.setter
     def json(self, value):
-        if type(value) == dict or value is None:
+        if type(value) is dict or value is None:
             self.init()
             self._json = value
         else:

@@ -1,9 +1,6 @@
-"""
-Lawrence McDaniel - https://lawrencemcdaniel.com
-Oct-2022
+# -*- coding: utf-8 -*-
+"""Memberpress REST API Client plugin for Django - utility and helper functions."""
 
-memberpress REST API Client plugin for Django - utility and helper functions.
-"""
 # python stuff
 import json
 import logging
@@ -25,26 +22,15 @@ logger = logging.getLogger(__name__)
 # to get past tests
 try:
     User = get_user_model()
-except Exception:
+except Exception:  # noqa
     User = None
 
 
 def masked_dict(obj) -> dict:
     """
-    To mask sensitive key / value in log entries.
-    masks the value of specified key.
+    To mask sensitive key / value in log entries. Masks the value of specified key.
 
     obj: a dict or a string representation of a dict, or None
-
-    example:
-        2022-10-07 20:03:01,455 INFO memberpress_client.client.Client.register_user() request: path=/api/user/v1/account/registration/, data={
-            "name": "__Pat_SelfReg-07",
-            "username": "__Pat_SelfReg-07",
-            "email": "pat.mcguire+Pat_SelfReg-07@cabinetoffice.gov.uk",
-            "password": "*** -- REDACTED -- ***",
-            "terms_of_service": true
-        }
-
     """
 
     def redact(key: str, obj):
@@ -61,7 +47,8 @@ def masked_dict(obj) -> dict:
 
 class MPJSONEncoder(json.JSONEncoder):
     """
-    a custom encoder class.
+    A custom encoder class.
+
     - smooth out bumps mostly related to test data.
     - ensure text returned is utf-8 encoded.
     - velvety smooth error handling, understanding that we mostly use
@@ -69,18 +56,30 @@ class MPJSONEncoder(json.JSONEncoder):
     """
 
     def default(self, obj):
+        """Encode obj as JSON."""
         if isinstance(obj, bytes):
             return str(obj, encoding="utf-8")
         if isinstance(obj, MagicMock):
             return ""
         try:
             return json.JSONEncoder.default(self, obj)
-        except Exception:
+        except Exception:  # noqa
             # obj probably is not json serializable.
             return ""
 
 
 def get_user(username):
+    """Retrieve a User object by username.
+
+    Args:
+        username (str): The username of the user to retrieve.
+
+    Returns:
+        User: The User object with the specified username.
+
+    Raises:
+        ObjectDoesNotExist: If no User object with the specified username exists.
+    """
     try:
         return User.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -88,9 +87,7 @@ def get_user(username):
 
 
 def log_trace(caller: str, path: str, data: dict) -> None:
-    """
-    add an application log entry for higher level defs that call the edxapp api.
-    """
+    """Add an application log entry for higher level defs that call the edxapp api."""
     logger.info(
         "memberpress_client.client.Client.{caller}() request: path={path}, data={data}".format(
             caller=caller, path=path, data=json.dumps(masked_dict(data), cls=MPJSONEncoder, indent=4)
@@ -99,9 +96,7 @@ def log_trace(caller: str, path: str, data: dict) -> None:
 
 
 def log_pretrip(caller: str, url: str, data: dict, operation: str = "") -> None:
-    """
-    add an application log entry immediately prior to calling the edxapp api.
-    """
+    """Add an application log entry immediately prior to calling the edxapp api."""
     logger.info(
         "memberpress_client.client.Client.{caller}() {operation}, request: url={url}, data={data}".format(
             operation=operation,
@@ -113,13 +108,11 @@ def log_pretrip(caller: str, url: str, data: dict, operation: str = "") -> None:
 
 
 def log_postrip(caller: str, path: str, response: Response, operation: str = "") -> None:
-    """
-    log the api response immediately after calling the edxapp api.
-    """
+    """Log the api response immediately after calling the edxapp api."""
     status_code = response.status_code if response is not None else 599
-    log_message = "memberpress_client.client.Client.{caller}() {operation}, response status_code={response_status_code}, path={path}".format(
+    log_message = "memberpress_client.client.Client.{caller}() {operation}, response status_code={response_status_code}, path={path}".format(  # noqa
         operation=operation, caller=caller, path=path, response_status_code=status_code
-    )
+    )  # noqa
     if 200 <= status_code <= 399:
         logger.info(log_message)
     else:

@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+"""Memberpress Client API v1 views."""
 # Python stuff
-import json
 import logging
 from datetime import datetime
 
@@ -11,10 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 class Subscription(MemberpressAPIClient):
+    """Memberpress Subscription API v1 views."""
+
     def __init__(self, subscription=None) -> None:
         super().__init__()
         self.init()
-        if type(subscription) == dict:
+        if type(subscription) is dict:
             self.json = subscription
         else:
             logger.warning("received an invalid subscription object: {o}".format(o=subscription))
@@ -25,8 +28,9 @@ class Subscription(MemberpressAPIClient):
     @property
     def is_complete_dict(self) -> bool:
         """
-        validate that response is a json dict containing at least
-        the keys in qc_keys. These are the dict keys returned by the
+        Validate that response is a json dict containing at least the keys in qc_keys.
+
+        These are the dict keys returned by the
         MemberPress REST api "/me" endpoint for a subscribed user.
         """
         qc_keys = COMPLETE_SUBSCRIPTION_DICT
