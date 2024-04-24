@@ -1,6 +1,21 @@
 # -------------------------------------------------------------------------
 # build a package for PyPi
 # -------------------------------------------------------------------------
+SHELL := /bin/bash
+export
+
+ifeq ($(OS),Windows_NT)
+    PYTHON := python.exe
+    ACTIVATE_VENV := venv\Scripts\activate
+else
+    PYTHON := python3.11
+    ACTIVATE_VENV := source venv/bin/activate
+endif
+PIP := $(PYTHON) -m pip
+
+ifneq ("$(wildcard .env)","")
+endif
+
 .PHONY: build requirements deps-update deps-init
 
 dev-db:
@@ -13,6 +28,29 @@ dev-up:
 dev-down:
 	brew services stop mysql
 	brew services stop redis
+
+# ---------------------------------------------------------
+# Python
+# ---------------------------------------------------------
+check-python:
+	@command -v $(PYTHON) >/dev/null 2>&1 || { echo >&2 "This project requires $(PYTHON) but it's not installed.  Aborting."; exit 1; }
+
+python-init:
+	make check-python
+	make python-clean && \
+	$(PYTHON) -m venv venv && \
+	$(ACTIVATE_VENV) && \
+	$(PIP) install --upgrade pip && \
+	$(PIP) install -r requirements/local.txt
+
+python-lint:
+	make check-python
+	make pre-commit-run
+
+python-clean:
+	rm -rf venv
+	find ./ -name __pycache__ -type d -exec rm -rf {} +
+
 
 django-server:
 	./manage.py runserver 0.0.0.0:8000
