@@ -46,8 +46,8 @@ class MemberpressAPIClient(Memberpress):
         }
 
     @request_manager
-    def post(self, path, data=None, host=None, operation="") -> json:
-        url = self.get_url(path, host=host)
+    def post(self, path, data=None, operation="") -> json:
+        url = self.get_url(path)
         log_pretrip(caller=inspect.currentframe().f_code.co_name, url=url, data=data, operation=operation)
         response = requests.post(url, data=data, headers=self.headers)
         log_postrip(caller=inspect.currentframe().f_code.co_name, path=url, response=response, operation=operation)
@@ -55,8 +55,8 @@ class MemberpressAPIClient(Memberpress):
         return response.json()
 
     @request_manager
-    def patch(self, path, data=None, host=None, headers=None, json=True, operation=""):
-        url = self.get_url(path, host=host)
+    def patch(self, path, data=None, headers=None, json=True, operation=""):
+        url = self.get_url(path)
         if not headers:
             headers = self.headers
 
