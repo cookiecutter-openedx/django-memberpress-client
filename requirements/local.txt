@@ -433,7 +433,7 @@ werkzeug[watchdog]==2.2.2
     # via -r requirements/local.in
 wheel==0.37.1
     # via -r requirements/local.in
-wrapt==1.11.2
+wrapt==1.14.1
     # via
     #   -c requirements/./constraints.txt
     #   astroid
