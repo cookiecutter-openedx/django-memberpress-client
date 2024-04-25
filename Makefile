@@ -91,8 +91,8 @@ deps-init:
 
 deps-update:
 	$(PIP) install --upgrade pip-tools pip wheel
-	$(PIP)tools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
-	$(PIP)tools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
+	$(PYTHON) -m piptools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
+	$(PYTHON) -m piptools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
 
 
 report:
