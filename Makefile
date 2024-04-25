@@ -11,7 +11,7 @@ else
     PYTHON := python3.11
     ACTIVATE_VENV := source venv/bin/activate
 endif
-PIP := $(PIP)
+PIP := $(PYTHON) -m pip
 
 ifneq ("$(wildcard .env)","")
 endif
