@@ -1,5 +1,9 @@
 # CHANGE LOG
 
+## Version 1.0.5 (2024-04-25)
+
+- fix bug with MemberpressAPIClient post and patch methods
+
 ## Version 1.0.4 (2023-11-09)
 
 - Add support for retrieving a Member by user_id
