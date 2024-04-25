@@ -53,15 +53,15 @@ python-clean:
 
 
 django-server:
-	./manage.py runserver 0.0.0.0:8000
+	python3.11 ./manage.py runserver 0.0.0.0:8000
 
 django-migrate:
-	./manage.py migrate
-	./manage.py makemigrations memberpress_client
-	./manage.py migrate memberpress_client
+	python3.11 ./manage.py migrate
+	python3.11 ./manage.py makemigrations memberpress_client
+	python3.11 ./manage.py migrate memberpress_client
 
 django-shell:
-	./manage.py shell_plus
+	python3.11 ./manage.py shell_plus
 
 
 django-quickstart:
@@ -70,30 +70,29 @@ django-quickstart:
 	make dev-up
 	make dev-db
 	make django-migrate
-	./manage.py createsuperuser
+	python3.11 ./manage.py createsuperuser
 	make django-server
 
 django-test:
-	./manage.py test
+	python3.11 ./manage.py test
 
 requirements:
-	pre-commit autoupdate
-	python3 -m pip install --upgrade pip wheel
+	python3.11 -m pip install --upgrade pip wheel pip-tools
 	pip-compile requirements/common.in
 	pip-compile requirements/local.in
-	pip install -r requirements/common.txt
-	pip install -r requirements/local.txt
+	python3.11 -m pip install -r requirements/common.txt
+	python3.11 -m pip install -r requirements/local.txt
 
 deps-init:
 	rm -rf .tox
-	python3 -m pip install --upgrade pip wheel
-	python3 -m pip install --upgrade -r requirements/common.txt -r requirements/local.txt -e .
-	python3 -m pip check
+	python3.11 -m pip install --upgrade pip wheel
+	python3.11 -m pip install --upgrade -r requirements/common.txt -r requirements/local.txt -e .
+	python3.11 -m pip check
 
 deps-update:
-	python3 -m pip install --upgrade pip-tools pip wheel
-	python3 -m piptools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
-	python3 -m piptools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
+	python3.11 -m pip install --upgrade pip-tools pip wheel
+	python3.11 -m piptools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
+	python3.11 -m piptools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
 
 
 report:
@@ -101,17 +100,17 @@ report:
 
 
 build:
-	python3 -m pip install --upgrade setuptools wheel twine
-	python3 -m pip install --upgrade build
+	python3.11 -m pip install --upgrade setuptools wheel twine
+	python3.11 -m pip install --upgrade build
 
 	if [ -d "./build" ]; then sudo rm -r build; fi
 	if [ -d "./dist" ]; then sudo rm -r dist; fi
 	if [ -d "./django_memberpress_client.egg-info" ]; then sudo rm -r django_memberpress_client.egg-info; fi
 
-	python3 -m build --sdist ./
-	python3 -m build --wheel ./
+	python3.11 -m build --sdist ./
+	python3.11 -m build --wheel ./
 
-	python3 -m pip install --upgrade twine
+	python3.11 -m pip install --upgrade twine
 	twine check dist/*
 
 
