@@ -11,7 +11,7 @@ else
     PYTHON := python3.11
     ACTIVATE_VENV := source venv/bin/activate
 endif
-PIP := $(PYTHON) -m pip
+PIP := $(PIP)
 
 ifneq ("$(wildcard .env)","")
 endif
@@ -53,15 +53,15 @@ python-clean:
 
 
 django-server:
-	python3.11 ./manage.py runserver 0.0.0.0:8000
+	$(PYTHON) ./manage.py runserver 0.0.0.0:8000
 
 django-migrate:
-	python3.11 ./manage.py migrate
-	python3.11 ./manage.py makemigrations memberpress_client
-	python3.11 ./manage.py migrate memberpress_client
+	$(PYTHON) ./manage.py migrate
+	$(PYTHON) ./manage.py makemigrations memberpress_client
+	$(PYTHON) ./manage.py migrate memberpress_client
 
 django-shell:
-	python3.11 ./manage.py shell_plus
+	$(PYTHON) ./manage.py shell_plus
 
 
 django-quickstart:
@@ -70,29 +70,29 @@ django-quickstart:
 	make dev-up
 	make dev-db
 	make django-migrate
-	python3.11 ./manage.py createsuperuser
+	$(PYTHON) ./manage.py createsuperuser
 	make django-server
 
 django-test:
-	python3.11 ./manage.py test
+	$(PYTHON) ./manage.py test
 
 requirements:
-	python3.11 -m pip install --upgrade pip wheel pip-tools
+	$(PIP) install --upgrade pip wheel pip-tools
 	pip-compile requirements/common.in
 	pip-compile requirements/local.in
-	python3.11 -m pip install -r requirements/common.txt
-	python3.11 -m pip install -r requirements/local.txt
+	$(PIP) install -r requirements/common.txt
+	$(PIP) install -r requirements/local.txt
 
 deps-init:
 	rm -rf .tox
-	python3.11 -m pip install --upgrade pip wheel
-	python3.11 -m pip install --upgrade -r requirements/common.txt -r requirements/local.txt -e .
-	python3.11 -m pip check
+	$(PIP) install --upgrade pip wheel
+	$(PIP) install --upgrade -r requirements/common.txt -r requirements/local.txt -e .
+	$(PIP) check
 
 deps-update:
-	python3.11 -m pip install --upgrade pip-tools pip wheel
-	python3.11 -m piptools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
-	python3.11 -m piptools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
+	$(PIP) install --upgrade pip-tools pip wheel
+	$(PIP)tools compile --upgrade --resolver backtracking -o ./requirements/common.txt pyproject.toml
+	$(PIP)tools compile --extra dev --upgrade --resolver backtracking -o ./requirements/local.txt pyproject.toml
 
 
 report:
@@ -100,17 +100,17 @@ report:
 
 
 build:
-	python3.11 -m pip install --upgrade setuptools wheel twine
-	python3.11 -m pip install --upgrade build
+	$(PIP) install --upgrade setuptools wheel twine
+	$(PIP) install --upgrade build
 
 	if [ -d "./build" ]; then sudo rm -r build; fi
 	if [ -d "./dist" ]; then sudo rm -r dist; fi
 	if [ -d "./django_memberpress_client.egg-info" ]; then sudo rm -r django_memberpress_client.egg-info; fi
 
-	python3.11 -m build --sdist ./
-	python3.11 -m build --wheel ./
+	$(PYTHON) -m build --sdist ./
+	$(PYTHON) -m build --wheel ./
 
-	python3.11 -m pip install --upgrade twine
+	$(PIP) install --upgrade twine
 	twine check dist/*
 
 
