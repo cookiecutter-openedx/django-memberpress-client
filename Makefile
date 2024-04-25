@@ -77,6 +77,7 @@ django-test:
 	$(PYTHON) ./manage.py test
 
 requirements:
+	pre-commit autoupdate
 	$(PIP) install --upgrade pip wheel pip-tools
 	pip-compile requirements/common.in
 	pip-compile requirements/local.in
