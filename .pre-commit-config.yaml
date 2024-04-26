@@ -3,7 +3,7 @@ default_language_version:
   python: python3.8
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.6.0
     hooks:
       # See https://pre-commit.com/hooks.html for more hooks
       - id: check-ast
@@ -15,7 +15,7 @@ repos:
       #- id: name-tests-test
       #  args: [ "--django" ]
       - id: trailing-whitespace
-  -   repo: https://gitlab.com/pycqa/flake8
-      rev: 3.9.2
+  -   repo: https://github.com/pycqa/flake8
+      rev: 7.0.0
       hooks:
         - id: flake8
